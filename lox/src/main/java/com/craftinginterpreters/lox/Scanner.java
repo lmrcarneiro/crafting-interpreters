@@ -103,6 +103,22 @@ class Scanner {
                     // A comment goes until the end of the line.
                     while (peek() != '\n' && !isAtEnd())
                         advance();
+                } else if (match('*')) {
+                    // A block comment goes until reaching */.
+                    do {
+                        while (peek() != '*' && !isAtEnd()) {
+                            if (peek() == '\n') {
+                                line++;
+                            }
+                            advance();
+                        }
+
+                        if (isAtEnd()) {
+                            Lox.error(line, "Unterminated block comment.");
+                            return;
+                        }
+                        advance();
+                    } while (!match('/'));
                 } else {
                     addToken(SLASH);
                 }
@@ -132,6 +148,7 @@ class Scanner {
                 }
                 break;
         }
+
     }
 
     private void identifier() {
