@@ -1,4 +1,4 @@
-package chapter1;
+package challenges.chapter1;
 
 public class HelloWorld {
 
