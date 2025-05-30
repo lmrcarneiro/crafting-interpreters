@@ -1,0 +1,26 @@
+1.
+expr -> expr ( "(" ( expr ("," expr)* )? ")" | "." IDENTIFIER )+
+     |  IDENTIFIER
+     |  NUMBER
+
+
+Without |, * and + becomes:
+
+expr -> expr expr'
+expr -> IDENTIFIER
+expr -> NUMBER
+
+expr' -> opt1
+expr' -> opt2
+expr' -> expr'
+
+opt1 -> "(" ( expr )? ")"
+opt1 -> "(" ( expr opt1+ )? ")"
+
+opt1+ -> "," expr
+opt1+ -> opt1+
+
+opt2 -> "." IDENTIFIER
+
+
+Bonus: I think this bit of grammar encodes a CFG (Context-Free Grammar) since it can next arbitrarily.
