@@ -98,12 +98,25 @@ class Interpreter implements Expr.Visitor<Object> {
                 if (left instanceof Double && right instanceof Double) {
                     return (double) left + (double) right;
                 }
-                if (left instanceof String && right instanceof String) {
-                    return (String) left + (String) right;
-                }
 
+                // Challenge 2 of Chapter 6: allow concatenation of two operands
+                // if either one of them is a String.
+                // In such a case, the other operand must be a String or a Double,
+                // otherwise a RuntimeError is returned.
+                if (left instanceof String) {
+                    if (right instanceof String) {
+                        return (String) left + (String) right;
+                    }
+                    if (right instanceof Double) {
+                        return (String) left + right.toString();
+                    }
+                } else if (right instanceof String) {
+                    if (left instanceof Double) {
+                        return left.toString() + (String) right;
+                    }
+                }
                 throw new RuntimeError(expr.operator,
-                        "Operands must be two numbers or two strings.");
+                        "Operands must be two numbers, two strings or one number and one string.");
             case SLASH:
                 checkNumberOperands(expr.operator, left, right);
                 return (double) left / (double) right;
